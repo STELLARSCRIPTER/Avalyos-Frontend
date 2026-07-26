@@ -1,0 +1,6 @@
+{
+  "name": "Avalyos Global Intelligence",
+  "description": "High-stakes geopolitical risk overview, interactive heatmaps, country deep dives, exposure stress tests, and real-time market signal tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
