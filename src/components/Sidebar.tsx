@@ -24,6 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'global-overview', label: 'Global Overview', icon: 'public' },
     { id: 'company-intelligence', label: 'Company Intelligence', icon: 'business_center' },
     { id: 'flood-risk', label: 'Flood Risk Intelligence', icon: 'water_drop' },
+    { id: 'seismic-risk', label: 'Seismic Risk Intelligence', icon: 'vibration' },
   ];
 
   return (

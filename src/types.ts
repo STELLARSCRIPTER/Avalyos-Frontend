@@ -1,4 +1,4 @@
-export type NavTab = 'global-overview' | 'company-intelligence' | 'flood-risk';
+export type NavTab = 'global-overview' | 'company-intelligence' | 'flood-risk' | 'seismic-risk';
 
 export type AlertSeverity = 'CRITICAL' | 'ELEVATED' | 'STABLE';
 

@@ -5,6 +5,7 @@ import { KpiRow } from './components/KpiRow';
 import { MarketTickerFooter } from './components/MarketTickerFooter';
 import { CompanyIntelligenceView } from './components/CompanyIntelligenceView';
 import { FloodRiskView } from './components/FloodRiskView';
+import { SeismicRiskView } from './components/SeismicRiskView';
 import { NewAnalysisModal } from './components/NewAnalysisModal';
 import { DetailModal } from './components/DetailModal';
 
@@ -120,7 +121,8 @@ export default function App() {
           )}
 
           {/* VIEW 3: FLOOD RISK INTELLIGENCE */}
-          {activeTab === 'flood-risk' && <FloodRiskView />}
+          {activeTab === 'flood-risk' && <FloodRiskView />}   
+          {activeTab === 'seismic-risk' && <SeismicRiskView />}
         </main>
 
         {/* Bottom Financial Market Marquee Ticker */}
