@@ -6,6 +6,7 @@ import { MarketTickerFooter } from './components/MarketTickerFooter';
 import { CompanyIntelligenceView } from './components/CompanyIntelligenceView';
 import { FloodRiskView } from './components/FloodRiskView';
 import { SeismicRiskView } from './components/SeismicRiskView';
+import { ScenarioBuilderView } from './components/ScenarioBuilderView';
 import { NewAnalysisModal } from './components/NewAnalysisModal';
 import { DetailModal } from './components/DetailModal';
 
@@ -113,15 +114,18 @@ export default function App() {
             </>
           )}
 
-          {/* VIEW 2: COMPANY INTELLIGENCE */}
+          {/* VIEW 2: SCENARIO BUILDER */}
+          {activeTab === 'scenario-builder' && <ScenarioBuilderView />}
+
+          {/* VIEW 3: COMPANY INTELLIGENCE */}
           {activeTab === 'company-intelligence' && (
             <CompanyIntelligenceView
               onOpenNewAnalysisWithTopic={handleOpenNewAnalysisWithTopic}
             />
           )}
 
-          {/* VIEW 3: FLOOD RISK INTELLIGENCE */}
-          {activeTab === 'flood-risk' && <FloodRiskView />}   
+          {/* VIEW 4: FLOOD & SEISMIC RISK INTELLIGENCE */}
+          {activeTab === 'flood-risk' && <FloodRiskView />}
           {activeTab === 'seismic-risk' && <SeismicRiskView />}
         </main>
 

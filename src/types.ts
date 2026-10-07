@@ -1,4 +1,9 @@
-export type NavTab = 'global-overview' | 'company-intelligence' | 'flood-risk' | 'seismic-risk';
+export type NavTab =
+  | 'global-overview'
+  | 'company-intelligence'
+  | 'flood-risk'
+  | 'seismic-risk'
+  | 'scenario-builder';
 
 export type AlertSeverity = 'CRITICAL' | 'ELEVATED' | 'STABLE';
 
@@ -22,4 +27,14 @@ export interface IntelBriefResponse {
   };
   strategicRecommendations: string[];
   rawAnalysisText?: string;
+}
+
+// NEW: Company entity from GLEIF search
+export interface Company {
+  lei: string;
+  name: string;
+  status: string;
+  jurisdiction: string | null;
+  country: string | null;
+  city: string | null;
 }

@@ -22,6 +22,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const navItems: { id: NavTab; label: string; icon: string }[] = [
     { id: 'global-overview', label: 'Global Overview', icon: 'public' },
+    { id: 'scenario-builder', label: 'Scenario Builder', icon: 'addchart' },
     { id: 'company-intelligence', label: 'Company Intelligence', icon: 'business_center' },
     { id: 'flood-risk', label: 'Flood Risk Intelligence', icon: 'water_drop' },
     { id: 'seismic-risk', label: 'Seismic Risk Intelligence', icon: 'vibration' },
@@ -136,4 +137,4 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </aside>
     </>
   );
-};
+}; 
