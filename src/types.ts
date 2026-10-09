@@ -38,3 +38,9 @@ export interface Company {
   country: string | null;
   city: string | null;
 }
+
+export interface Region {
+  iso_code: string;
+  name: string;
+  flag_url: string | null;
+}

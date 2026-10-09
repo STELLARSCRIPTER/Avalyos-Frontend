@@ -5,11 +5,13 @@ const API_BASE = 'http://localhost:8000';
 
 interface CompanySearchProps {
   onSelect: (company: Company) => void;
+  region?: string | null;  // ISO-2 code; if set, results are filtered to this country
   placeholder?: string;
 }
 
 export const CompanySearch: React.FC<CompanySearchProps> = ({
   onSelect,
+  region = null,
   placeholder = 'Search a company name...',
 }) => {
   const [query, setQuery] = useState('');
@@ -22,7 +24,7 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<number | null>(null);
 
-  // Close dropdown on outside click
+  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -33,13 +35,19 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  // Clear stale results when region changes
+  useEffect(() => {
+    setResults([]);
+    setHasSearched(false);
+    setIsOpen(false);
+  }, [region]);
+
   // Debounced search
   useEffect(() => {
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
 
     const trimmed = query.trim();
 
-    // Clear everything if query is too short
     if (trimmed.length < 3) {
       setResults([]);
       setIsOpen(false);
@@ -54,13 +62,21 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({
     debounceRef.current = window.setTimeout(async () => {
       try {
         const res = await fetch(
-          `${API_BASE}/companies/search?q=${encodeURIComponent(trimmed)}&limit=15`
+          `${API_BASE}/companies/search?q=${encodeURIComponent(trimmed)}&limit=50`
         );
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
           throw new Error(body?.detail?.error || `Search failed (${res.status})`);
         }
-        const data: Company[] = await res.json();
+        let data: Company[] = await res.json();
+
+        // Client-side filter: strict region match when a region is selected.
+        // GLEIF's search endpoint doesn't accept a country filter, so this
+        // is the correct place to apply it.
+        if (region) {
+          data = data.filter((c) => c.country === region);
+        }
+
         setResults(data);
         setError(null);
         setIsOpen(true);
@@ -78,7 +94,7 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({
     return () => {
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
     };
-  }, [query]);
+  }, [query, region]);
 
   const handleSelect = (company: Company) => {
     onSelect(company);
@@ -138,7 +154,9 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({
 
           {!error && hasSearched && results.length === 0 && !loading && (
             <div className="px-4 py-3 text-xs font-['JetBrains_Mono'] text-[#666666]">
-              No companies found for "{query.trim()}"
+              {region
+                ? `No companies found for "${query.trim()}" in ${region}`
+                : `No companies found for "${query.trim()}"`}
             </div>
           )}
 
@@ -174,4 +192,3 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({
     </div>
   );
 };
-

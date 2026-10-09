@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CompanySearch } from './CompanySearch';
 import { DecisionCard, AnalyzeResponse } from './DecisionCard';
+import { RegionSelect } from './RegionSelect';
 import { Company } from '../types';
 
 const API_BASE = 'http://localhost:8000';
@@ -16,6 +17,7 @@ const SECTOR_OPTIONS = [
 ];
 
 export const ScenarioBuilderView: React.FC = () => {
+  const [region, setRegion] = useState<string>('');   // '' means "All regions"
   const [company, setCompany] = useState<Company | null>(null);
   const [sector, setSector] = useState<string>('Industrial');
   const [investmentAmount, setInvestmentAmount] = useState<string>('');
@@ -47,7 +49,9 @@ export const ScenarioBuilderView: React.FC = () => {
         body: JSON.stringify({
           company: company.name,
           sector: sector,
-          country: company.country || null,
+          // If a region is picked, prefer it over the company's registered country.
+          // That way the user can evaluate "this company, in this region" explicitly.
+          country: region || company.country || null,
           investment_amount: parseFloat(investmentAmount),
           time_horizon_years: parseFloat(timeHorizon),
         }),
@@ -86,12 +90,29 @@ export const ScenarioBuilderView: React.FC = () => {
         </p>
       </div>
 
+      {/* Region */}
+      <RegionSelect
+        value={region || null}
+        onChange={(iso) => {
+          setRegion(iso);
+          // Changing region invalidates the selected company — the user
+          // should re-pick a company from the new scope.
+          setCompany(null);
+          setResult(null);
+          setError(null);
+        }}
+        label="Region"
+        placeholder="All regions (search globally)"
+        includeAll={true}
+      />
+
       {/* Company */}
       <div className="space-y-2">
         <label className="font-['JetBrains_Mono'] text-[10px] uppercase tracking-wider text-[#888888] font-bold">
           Company
         </label>
         <CompanySearch
+          region={region || null}
           onSelect={(c) => {
             setCompany(c);
             setResult(null);
@@ -208,4 +229,3 @@ export const ScenarioBuilderView: React.FC = () => {
     </div>
   );
 };
-
