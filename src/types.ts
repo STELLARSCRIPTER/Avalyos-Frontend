@@ -44,3 +44,38 @@ export interface Region {
   name: string;
   flag_url: string | null;
 }
+
+// --- Decision engine types (mirror backend schemas) ---
+
+export interface SignalContribution {
+  signal: string;
+  score: number | null;
+  weight: number;
+  available: boolean;
+}
+
+export interface AnalyzeResponse {
+  risk_score: number;
+  risk_level: string;
+  reasons: string[];
+  suggestion: string;
+  signals: SignalContribution[];
+}
+
+export interface ComparisonSummary {
+  riskier_region: 'a' | 'b' | 'equal';
+  score_difference: number;
+  level_change: string;
+  top_diverging_signal: string;
+  diverging_signal_delta: number;
+  summary_line: string;
+}
+
+export interface CompareResponse {
+  company: string | null;
+  region_a: string;
+  region_b: string;
+  result_a: AnalyzeResponse;
+  result_b: AnalyzeResponse;
+  summary: ComparisonSummary;
+}

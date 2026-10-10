@@ -20,6 +20,8 @@ interface DecisionCardProps {
   compact?: boolean;
   onExport?: () => void;
   onSeeReasoning?: () => void;
+  hideSharedReasons?: boolean;   // for compare view: omit reasons that are shared with the other region
+  sharedReasons?: string[];      // reasons to filter out when hideSharedReasons is true
 }
 
 const levelColor = (level: string) => {
@@ -48,8 +50,14 @@ export const DecisionCard: React.FC<DecisionCardProps> = ({
   compact = false,
   onExport,
   onSeeReasoning,
+  hideSharedReasons = false,
+  sharedReasons = [],
 }) => {
   const colors = levelColor(result.risk_level);
+
+  const visibleReasons = hideSharedReasons
+    ? result.reasons.filter((r) => !sharedReasons.includes(r))
+    : result.reasons;
 
   return (
     <div className="border border-[#1F1F1F] bg-[#0A0A0A] rounded-sm p-6 space-y-6">
@@ -127,7 +135,7 @@ export const DecisionCard: React.FC<DecisionCardProps> = ({
           Reasons
         </p>
         <ul className="space-y-2">
-          {result.reasons.map((r, i) => (
+          {visibleReasons.map((r, i) => (
             <li
               key={i}
               className="flex gap-3 text-[13px] text-[#c9c9c9] leading-relaxed"
@@ -149,7 +157,7 @@ export const DecisionCard: React.FC<DecisionCardProps> = ({
         </p>
       </div>
 
-      {/* Optional actions footer (hidden if no callbacks passed) */}
+      {/* Optional actions footer */}
       {(onExport || onSeeReasoning) && !compact && (
         <div className="pt-4 border-t border-[#1F1F1F] flex gap-3">
           {onSeeReasoning && (
@@ -173,4 +181,3 @@ export const DecisionCard: React.FC<DecisionCardProps> = ({
     </div>
   );
 };
-
